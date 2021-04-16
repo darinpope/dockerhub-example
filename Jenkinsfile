@@ -12,19 +12,25 @@ pipeline {
         sh 'docker build -t darinpope/dp-alpine:latest .'
       }
     }
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      }
+    }
     stage('Scan') {
       steps {
         sh 'docker scan --accept-license --dependency-tree darinpope/dp-alpine:latest'
       }
     }
-    stage('Publish') {
+    stage('Push') {
       steps {
-        sh '''
-          echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-          docker push darinpope/dp-alpine:latest
-          docker logout
-        '''
+        sh 'docker push darinpope/dp-alpine:latest'
       }
+    }
+  }
+  post {
+    always {
+      sh 'docker logout'
     }
   }
 }
