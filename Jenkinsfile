@@ -14,13 +14,13 @@ pipeline {
     }
     stage('Scan') {
       steps {
-        sh 'docker scan darinpope/dp-alpine:latest'
+        sh 'docker scan --accept-license --dependency-tree darinpope/dp-alpine:latest'
       }
     }
     stage('Publish') {
       steps {
         sh '''
-          docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW
+          echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
           docker push darinpope/dp-alpine:latest
           docker logout
         '''
