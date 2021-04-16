@@ -17,11 +17,6 @@ pipeline {
         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
       }
     }
-    stage('Scan') {
-      steps {
-        sh 'docker scan --accept-license --dependency-tree darinpope/dp-alpine:latest'
-      }
-    }
     stage('Push') {
       steps {
         sh 'docker push darinpope/dp-alpine:latest'
