@@ -1,9 +1,6 @@
 pipeline {
-  agent { label 'linux' }
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
-  }
-  environment {
+  agent 
+    environment {
     DOCKERHUB_CREDENTIALS = credentials('darinpope-dockerhub')
   }
   stages {
